@@ -1,41 +1,76 @@
 import tkinter as tk
 from tkinter.scrolledtext import ScrolledText
-import tkinter.ttk as ttk
+# import tkinter.ttk as ttk
 from PIL import ImageTk, Image
 
-class Application(ttk.Frame):
+class Application(tk.Frame):
     def __init__(self, master=None):
-        ttk.Frame.__init__(self, master)
+        tk.Frame.__init__(self, master)
+        self.master = master
+        self.status = 0
 
-        self.pack()
-        self.Login_Screen()
+        self.img = ImageTk.PhotoImage(Image.open("Other/martins-logo.png"))
 
-    def Login_Screen(self):
-        # img = ImageTk.PhotoImage(Image.open("Other/martins-logo.png"))
-        # canvas.create_image(20,20, anchor=NW, image=img)
-        # img = ImageTk.PhotoImage(Image.open("Other/martins-logo.png"))
-        # self.create_image(20,20, anchor=NW, image=self.img)
-        # self.image = self.img
+        if self.status == 0:
+            self.login_screen()
+        elif self.status == 1:
+            self.program_screen()
 
-        # load = Image.open("Other/martins-logo.png")
-        # render = ImageTk.PhotoImage(load)
-        # img = Label(self, image=render)
-        # img.image = render
-        # img.place(x=0, y=0)
+    def refresh(self):
+        self.destroy()
+        self.update()
 
-        self.hi_there = tk.Button(self)
-        self.hi_there["text"] = "Hello World\n(click me)"
-        self.hi_there["command"] = self.say_hi
-        self.hi_there.pack(side="top")
+    def logo(self):
+        img = Image.open("Other/martins-logo.png")
+        #img = img.resize((250, 250), Image.ANTIALIAS)
+        img = ImageTk.PhotoImage(img)
+        panel = tk.Label(root, image=img)
+        panel.image = img
+        panel.grid(column =1, row = 0)
 
-        self.quit = tk.Button(self, text="QUIT", fg="red", command=self.master.destroy)
-        self.quit.pack(side="bottom")
+    def login_screen(self):
+        self.logo()
 
-    def say_hi(self):
-        print("hi there, everyone!")
+        lbl_login = tk.Label(text='Login')
+        lbl_login.grid(column =1, row = 1)
+
+        lbl_id = tk.Label(text='Bruger id')
+        lbl_id.grid(column =1, row = 2)
+        self.en_id = tk.Entry()
+        self.en_id.grid(column=1, row=2)
+
+        lbl_kode = tk.Label(text='Password')
+        lbl_kode.grid(column =0, row =3)
+        self.en_kode = tk.Entry()
+        self.en_kode.grid(column =1, row =3)
+
+        but_login = tk.Button(text="Login", command=lambda: self.user_login())
+        but_login.grid(column =1, row =4)
+        print("Status: {}".format(self.status))
+
+    def user_login(self):
+        bruger_id = self.en_id.get()
+        password = self.en_kode.get()
+        print("id: {}  pass: {}".format(bruger_id, password))
+        print("Bruger login udført")
+        self.status = 1
+        print("Status: {}".format(self.status))
+        print("her er jeg")
+        self.refresh()
+        self.en_id.delete(0,"end")
+
+    def program_screen(self):
+        tk.delete("all")
+        #self.logo()
+        print("_______jeg er ker i koden _____")
+        print("Status: {}".format(self.status))
+        lbl_test = tk.Label(text='Test1234')
+        #pack(side="top")
+
+
 
 root = tk.Tk()
-root.geometry("800x600")
-app = Application(master=root)
-app.master.title('Martin´s Supermarked')
-app.mainloop()
+app = Application(root)
+root.title('Martin´s Supermarked')
+root.geometry("800x800")
+root.mainloop()
