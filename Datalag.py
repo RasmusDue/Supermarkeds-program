@@ -1,32 +1,26 @@
-# from tkinter import *
-# root = Tk()
-# canvas = Canvas(root, width = 300, height = 300)
-# canvas.pack()
-# img = PhotoImage(file="Other/martins-logo.png")
-# canvas.create_image(20,20, anchor=NW, image=img)
-# mainloop()
+import sqlite3
 
-from tkinter import *
-from PIL import ImageTk, Image
-from tkinter import filedialog
-import os
+class Data():
+    def init(reset):
+    con = sqlite3.connect('database.db')
+    if reset:
+        con.execute("DROP TABLE products")
 
-root = Tk()
-root.geometry("550x300+300+150")
-root.resizable(width=True, height=True)
-
-def openfn():
-    filename = filedialog.askopenfilename(title='open')
-    return filename
-def open_img():
-    x = openfn()
-    img = Image.open(x)
-    img = img.resize((250, 250), Image.ANTIALIAS)
-    img = ImageTk.PhotoImage(img)
-    panel = Label(root, image=img)
-    panel.image = img
-    panel.pack()
-
-btn = Button(root, text='open image', command=open_img).pack()
-
-root.mainloop()
+############### Products ###############
+    try:
+        con.execute("""CREATE TABLE products (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            price FLOAT,
+            purchase_price FLOAT,
+            ammount_off FLOAT,
+            stock INTEGER,
+            bar_code INTEGER,
+            category STRING,
+            name STRING)""")
+        con.commit()
+        print('Sucessfully created products database')
+    except Exception as e:
+        if str(e) == "table products already exists":
+            pass
+        else:
+            print(f"ERROR : {e}")
