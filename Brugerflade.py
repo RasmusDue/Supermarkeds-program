@@ -3,7 +3,7 @@ from tkinter.scrolledtext import ScrolledText
 import tkinter.ttk as ttk
 from PIL import ImageTk, Image
 
-from Datalag import Data
+#from Datalag import Data
 
 class Application(ttk.Frame):
     def __init__(self, master=None):
