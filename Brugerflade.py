@@ -3,7 +3,9 @@ from tkinter.scrolledtext import ScrolledText
 # import tkinter.ttk as ttk
 from PIL import ImageTk, Image
 
-class Application(tk.Frame):
+#from Datalag import Data
+
+class Application(ttk.Frame):
     def __init__(self, master=None):
         tk.Frame.__init__(self, master)
         self.master = master
