@@ -11,12 +11,14 @@ class GUI(tk.Frame):
 
         self.build_GUI()
 
+
+
     def build_GUI(self):
-        self.Funktion_1_button = ttk.Button(text="Funktion")
+        self.Funktion_1_button = ttk.Button(self,text="Funktion")
         self.Funktion_1_button.grid(column =1, row = 1)
-        self.Funktion_2_button = ttk.Button(text="Funktion")
+        self.Funktion_2_button = ttk.Button(self,text="Funktion")
         self.Funktion_2_button.grid(column =1, row = 2)
-        self.Funktion_3_button = ttk.Button(text="Funktion")
+        self.Funktion_3_button = ttk.Button(self,text="Funktion")
         self.Funktion_3_button.grid(column =1, row = 3)
 
 
