@@ -3,15 +3,31 @@ from tkinter.scrolledtext import ScrolledText
 import tkinter.ttk as ttk
 from PIL import ImageTk, Image
 
-#from Datalag import Data
+from Datalag import Data
+#d = Data()
 
 class Application(ttk.Frame):
     def __init__(self, master=None):
         tk.Frame.__init__(self, master)
         self.master = master
         self.img = ImageTk.PhotoImage(Image.open("Other/martins-logo.png"))
+        self.data = Data()
 
         self.program_screen()
+
+    def program_screen(self):
+        self.Login_button = ttk.Button(self, text="Login", command= self.login_screen)
+        self.Login_button.grid(column =0, row = 0)
+        self.Funktion_1_button = ttk.Button(self, text="Funktion")
+        self.Funktion_1_button.grid(column =0, row = 1)
+        self.Funktion_2_button = ttk.Button(self, text="Funktion")
+        self.Funktion_2_button.grid(column =0, row = 2)
+        self.Funktion_3_button = ttk.Button(self, text="Funktion")
+        self.Funktion_3_button.grid(column =0, row = 3)
+        self.Vare_liste = tk.Listbox(self, width=40)
+        self.Vare_liste.grid(column =1, row = 1)
+
+        self.pack()
 
     def logo(self, frame, x, y):
         img = Image.open("Other/martins-logo.png")
@@ -22,6 +38,16 @@ class Application(ttk.Frame):
         panel.grid(column =x, row = y)
 
     def login_screen(self):
+        def user_login():
+            bruger_id = self.en_id.get()
+            password = self.en_kode.get()
+            print("id: {}  pass: {}".format(bruger_id, password))
+            print("Bruger login udført")
+            print(self.data.tjek_password("Palle"))
+            #rettighedder
+            dlg.destroy()
+            dlg.update()
+
         dlg = tk.Toplevel()
         dlg.geometry("250x250")
         dlg.title('Martin´s Login')
@@ -40,23 +66,12 @@ class Application(ttk.Frame):
         self.en_kode = tk.Entry(dlg)
         self.en_kode.grid(column =1, row =3)
 
-        but_login = tk.Button(dlg, text="Login", command=lambda: user_login())
+        but_login = tk.Button(dlg, text="Login", command= user_login)
         but_login.grid(column =1, row =4)
 
-        def user_login():
-            bruger_id = self.en_id.get()
-            password = self.en_kode.get()
-            print("id: {}  pass: {}".format(bruger_id, password))
-            print("Bruger login udført")
-            dlg.destroy()
-            dlg.update()
 
-    def program_screen(self):
-        lbl_test = ttk.Label(self, text='Test1234')
-        lbl_test.pack(side="top")
-        but_login = tk.Button(self, text="Login", command=self.login_screen)
-        but_login.pack(side="top")
-        self.pack()
+
+
 
 
 

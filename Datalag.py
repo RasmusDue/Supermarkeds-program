@@ -1,26 +1,32 @@
 import sqlite3
+import datetime
+datetime.date.fromisoformat('2019-12-04')
+#Her oprettes en forbindelse til databasefilen
+#Hvis filen ikke findes, vil sqlite oprette en ny tom database.
+class Data:
+    def __init__(self):
+        self.con = sqlite3.connect('data_supermarked.db')
+        print('Database åbnet i class')
 
-class Data():
-    def init(reset):
-    con = sqlite3.connect('database.db')
-    if reset:
-        con.execute("DROP TABLE products")
+    def create_data(self):
+        # c = con.cursor()
+        # c.execute('DROP TABLE bruger_tabel')
+        # con.commit()
+        # print('table drop')
+        try:
+            self.con.execute("""CREATE TABLE bruger_tabel (
+        		id INTEGER PRIMARY KEY AUTOINCREMENT,
+        		navn STRING,
+                password STRING)""")
+            print('Tabel oprettet')
+        except Exception as e:
+            print('Tabellen findes allerede')
 
-############### Products ###############
-    try:
-        con.execute("""CREATE TABLE products (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            price FLOAT,
-            purchase_price FLOAT,
-            ammount_off FLOAT,
-            stock INTEGER,
-            bar_code INTEGER,
-            category STRING,
-            name STRING)""")
-        con.commit()
-        print('Sucessfully created products database')
-    except Exception as e:
-        if str(e) == "table products already exists":
-            pass
-        else:
-            print(f"ERROR : {e}")
+        # c = self.con.cursor()
+        # c.execute('INSERT INTO bruger_tabel (navn,password) VALUES (?,?)', ("Palle", "1234"))
+        # self.con.commit()
+
+    def tjek_password(self, bruger):
+        c = self.con.cursor()
+        c.execute('SELECT password FROM bruger_tabel WHERE bruger_tabel.navn = (?)', (bruger,))
+        return c.fetchone()[0]
