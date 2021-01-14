@@ -4,17 +4,10 @@ from PIL import ImageTk,Image
 
 
 master = Tk()
-master.title("Tegninger")
-e = Entry(master)
+master.title("Super markede")
 
 canvas=Canvas(master,width=500,height=450)
-#hej
-#562 x 446
-#image=ImageTk.PhotoImage(Image.open("robot2.jpg"))
-
-#canvas.create_image(250,225,anchor=CENTER,image=image)
 canvas.pack()
-
 #color#
 ColorInput = "light sky blue"
 
