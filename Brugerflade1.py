@@ -12,14 +12,17 @@ class GUI(tk.Frame):
         self.build_GUI()
 
 
-
     def build_GUI(self):
-        self.Funktion_1_button = ttk.Button(self,text="Funktion")
-        self.Funktion_1_button.grid(column =1, row = 1)
-        self.Funktion_2_button = ttk.Button(self,text="Funktion")
-        self.Funktion_2_button.grid(column =1, row = 2)
-        self.Funktion_3_button = ttk.Button(self,text="Funktion")
-        self.Funktion_3_button.grid(column =1, row = 3)
+        right_frame = ttk.Frame()
+
+        self.Funktion_1_button = ttk.Button(right_frame,text="Funktion")
+        self.Funktion_1_button.pack()
+
+        # skal være der for at få det hele vist #
+
+        right_frame.pack(side=tk.RIGHT, fill=tk.Y)
+        
+        self.pack()
 
 
 
@@ -27,4 +30,4 @@ root = tk.Tk()
 app = GUI(root)
 root.title('Martin´s Supermarked')
 root.geometry("800x600")
-root.mainloop()
+app.mainloop()

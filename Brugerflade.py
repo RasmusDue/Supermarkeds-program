@@ -16,18 +16,45 @@ class Application(ttk.Frame):
         self.program_screen()
 
     def program_screen(self):
-        self.Login_button = ttk.Button(self, text="Login", command= self.login_screen)
+
+        # right_frame = ttk.Frame()
+        # left_frame = ttk.Frame()
+        # top_frame = ttk.Frame()
+        # but_frame = ttk.Frame()
+
+        # Create left and right frames
+        left_frame = tk.Frame(self, width=200, height= 400, bg='grey')
+        left_frame.grid(row=0, column=0, padx=10, pady=5)
+
+        right_frame = tk.Frame(self, width=650, height=400, bg='grey')
+        right_frame.grid(row=0, column=1, padx=10, pady=5)
+
+        self.logo(left_frame,0,0)
+        self.Login_button = ttk.Button(left_frame,text="Login", command= self.login_screen)
         self.Login_button.grid(column =0, row = 0)
-        self.Funktion_1_button = ttk.Button(self, text="Funktion")
+        self.Funktion_1_button = ttk.Button(left_frame, text="Funktion")
         self.Funktion_1_button.grid(column =0, row = 1)
-        self.Funktion_2_button = ttk.Button(self, text="Funktion")
+        self.Funktion_2_button = ttk.Button(left_frame, text="Funktion")
         self.Funktion_2_button.grid(column =0, row = 2)
-        self.Funktion_3_button = ttk.Button(self, text="Funktion")
+        self.Funktion_3_button = ttk.Button(right_frame, text="Funktion")
         self.Funktion_3_button.grid(column =0, row = 3)
-        self.Vare_liste = tk.Listbox(self, width=40)
+        self.Vare_liste = tk.Listbox(right_frame, width=40)
         self.Vare_liste.grid(column =1, row = 1)
+        self.Funktion_lable = ttk.Label(right_frame, text = "Funktioner" )
+        self.Funktion_lable.grid(column = 0, row = 1)
+        self.Vare_lable = tk.Label(right_frame, text = "Vare" )
+        self.Vare_lable.grid(column = 1, row = 1)
+
+        # skal være der for at få det hele vist #
+
+        # top_frame.pack(side=tk.TOP)
+        # but_frame.pack(side = tk.BOTTOM)
+        # left_frame.pack(side = tk.LEFT, fill=tk.Y)
+        # right_frame.pack(side=tk.RIGHT, fill=tk.Y)
 
         self.pack()
+
+
 
     def logo(self, frame, x, y):
         img = Image.open("Other/martins-logo.png")
@@ -76,7 +103,7 @@ class Application(ttk.Frame):
 
 
 root = tk.Tk()
-root.geometry("800x800")
+root.geometry("800x600")
 app = Application(root)
 app.master.title('Martin´s Supermarked')
 app.mainloop()
