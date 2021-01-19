@@ -16,45 +16,48 @@ class Application(ttk.Frame):
         self.program_screen()
 
     def program_screen(self):
-
-        # right_frame = ttk.Frame()
-        # left_frame = ttk.Frame()
-        # top_frame = ttk.Frame()
-        # but_frame = ttk.Frame()
+        #self.data.create_data()
 
         # Create left and right frames
         left_frame = tk.Frame(self, width=200, height= 400, bg='grey')
+
         left_frame.grid(row=0, column=0, padx=10, pady=5)
 
         right_frame = tk.Frame(self, width=650, height=400, bg='grey')
         right_frame.grid(row=0, column=1, padx=10, pady=5)
 
+        #left_frame <---
         self.logo(left_frame,0,0)
         self.Login_button = ttk.Button(left_frame,text="Login", command= self.login_screen)
-        self.Login_button.grid(column =0, row = 0)
-        self.Funktion_1_button = ttk.Button(left_frame, text="Funktion")
-        self.Funktion_1_button.grid(column =0, row = 1)
-        self.Funktion_2_button = ttk.Button(left_frame, text="Funktion")
-        self.Funktion_2_button.grid(column =0, row = 2)
-        self.Funktion_3_button = ttk.Button(right_frame, text="Funktion")
-        self.Funktion_3_button.grid(column =0, row = 3)
-        self.Vare_liste = tk.Listbox(right_frame, width=40)
-        self.Vare_liste.grid(column =1, row = 1)
-        self.Funktion_lable = ttk.Label(right_frame, text = "Funktioner" )
-        self.Funktion_lable.grid(column = 0, row = 1)
-        self.Vare_lable = tk.Label(right_frame, text = "Vare" )
-        self.Vare_lable.grid(column = 1, row = 1)
+        self.Login_button.grid(column =0, row = 1, sticky='nesw')
+        self.Add_vare_button = ttk.Button(left_frame, text="Tilføj vare", command= self.add_vare)
+        self.Add_vare_button.grid(column =0, row = 2,sticky='nesw')
+        self.Udsalg_button = ttk.Button(left_frame, text="Udsalg")
+        self.Udsalg_button.grid(column =0, row = 3, sticky='nesw')
+        self.Kategorier = ttk.Button(left_frame, text="Kategorier")
+        self.Kategorier.grid(column =0, row = 4, sticky='nesw')
+
+        #right_frame --->
+        self.Vare_liste = ttk.Treeview(right_frame, column=("column1", "column2", "column3", "column4", "column5"), show='headings')
+        self.Vare_liste.bind("<ButtonRelease-1>")
+        self.Vare_liste.heading("#1", text="Navn")
+        self.Vare_liste.column("#1",minwidth=0,width=100, stretch=tk.NO)
+        self.Vare_liste.heading("#2", text="Købs pris")
+        self.Vare_liste.column("#2",minwidth=0,width=100, stretch=tk.NO)
+        self.Vare_liste.heading("#3", text="salgs_pris")
+        self.Vare_liste.column("#3",minwidth=0,width=100, stretch=tk.NO)
+        self.Vare_liste.heading("#4", text="Type")
+        self.Vare_liste.column("#4",minwidth=0,width=100, stretch=tk.NO)
+        self.Vare_liste.heading("#5", text="Lagerstatus")
+        self.Vare_liste.column("#5",minwidth=0,width=100, stretch=tk.NO)
+
+        self.Vare_liste["displaycolumns"]=("column1", "column2", "column3", "column4", "column5")
+        ysb = ttk.Scrollbar(right_frame, command=self.Vare_liste.yview, orient=tk.VERTICAL)
+        self.Vare_liste.configure(yscrollcommand=ysb.set)
+        self.Vare_liste.grid(column = 1, row = 0)
 
         # skal være der for at få det hele vist #
-
-        # top_frame.pack(side=tk.TOP)
-        # but_frame.pack(side = tk.BOTTOM)
-        # left_frame.pack(side = tk.LEFT, fill=tk.Y)
-        # right_frame.pack(side=tk.RIGHT, fill=tk.Y)
-
         self.pack()
-
-
 
     def logo(self, frame, x, y):
         img = Image.open("Other/martins-logo.png")
@@ -69,11 +72,14 @@ class Application(ttk.Frame):
             bruger_id = self.en_id.get()
             password = self.en_kode.get()
             print("id: {}  pass: {}".format(bruger_id, password))
-            print("Bruger login udført")
-            print(self.data.tjek_password("Palle"))
-            #rettighedder
-            dlg.destroy()
-            dlg.update()
+            print(self.data.tjek_password(bruger_id))
+
+            if password == self.data.tjek_password(bruger_id):
+                print("Bruger login udført")
+                dlg.destroy()
+                dlg.update()
+            else:
+                print("forkert login")
 
         dlg = tk.Toplevel()
         dlg.geometry("250x250")
@@ -96,14 +102,54 @@ class Application(ttk.Frame):
         but_login = tk.Button(dlg, text="Login", command= user_login)
         but_login.grid(column =1, row =4)
 
+    def add_vare(self):
+        def add_data():
+            self.data.add_vare(self.en_navn.get(), self.en_pris.get(), self.en_sell_pris.get(), self.en_type.get(), self.en_lagerstatus.get())
+            close()
 
+        dlg1 = tk.Toplevel()
+        dlg1.geometry("250x250")
+        dlg1.title("Tilføj vare")
+        self.logo(dlg1, 1, 0)
 
+        self.lbl_navn = ttk.Label(dlg1, text='Navn')
+        self.lbl_navn.grid(column =0, row = 1)
+        self.en_navn = ttk.Entry(dlg1)
+        self.en_navn.grid(column=1, row=1)
 
+        self.lbl_pris = ttk.Label(dlg1, text='Købs pris')
+        self.lbl_pris.grid(column =0, row = 2)
+        self.en_pris = ttk.Entry(dlg1)
+        self.en_pris.grid(column=1, row=2)
+
+        self.lbl_pris = ttk.Label(dlg1, text='Salgs pris')
+        self.lbl_pris.grid(column =0, row = 3)
+        self.en_sell_pris = ttk.Entry(dlg1)
+        self.en_sell_pris.grid(column=1, row=3)
+
+        self.lbl_type = ttk.Label(dlg1, text='Type')
+        self.lbl_type.grid(column =0, row = 4)
+        self.en_type = ttk.Entry(dlg1)
+        self.en_type.grid(column=1, row=4)
+
+        self.lbl_lagerstatus = ttk.Label(dlg1, text='Lagerstatus')
+        self.lbl_lagerstatus.grid(column =0, row = 5)
+        self.en_lagerstatus = ttk.Entry(dlg1)
+        self.en_lagerstatus.grid(column=1, row=5)
+
+        def close():
+            dlg1.destroy()
+            dlg1.update()
+
+        self.but_annuller = ttk.Button(dlg1, text="Annuller", command=close)
+        self.but_annuller.grid(column=1,row=6)
+        self.but_ok = ttk.Button(dlg1, text="Tilføj vare", command= add_data)
+        self.but_ok.grid(column=0,row=6)
 
 
 
 root = tk.Tk()
-root.geometry("800x600")
+root.geometry("900x600")
 app = Application(root)
 app.master.title('Martin´s Supermarked')
 app.mainloop()
