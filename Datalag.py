@@ -34,6 +34,15 @@ class Data:
         except Exception as e:
             print('Tabellen findes allerede')
 
+        try:
+            self.con.execute("""CREATE TABLE kategorier (
+        		id INTEGER PRIMARY KEY AUTOINCREMENT,
+        		kategori STRING)""")
+            print('Tabel oprettet')
+        except Exception as e:
+            print('Tabellen findes allerede')
+
+
         # c = self.con.cursor()
         # c.execute('INSERT INTO bruger_tabel (navn,password) VALUES (?,?)', ("Palle", "1234"))
         # self.con.commit()
@@ -53,5 +62,24 @@ class Data:
         c = self.con.cursor()
         c.execute('SELECT * from vare_tabel')
         for x in c:
-            list.append(x[1],x[2],x[3],x[4],x[5])
-        return l
+            list.append(x)
+        return list
+
+    def get_vare(self, id):
+        c = self.con.cursor()
+
+    def change_pris(self, id, pris):
+        c = self.con.cursor()
+
+    def add_katagori(self, navn):
+        c = self.con.cursor()
+        c.execute('INSERT INTO kategorier (kategori) VALUES (?)', (navn,))
+        self.con.commit()
+
+    def get_kategorier(self):
+        list = []
+        c = self.con.cursor()
+        c.execute('SELECT * from kategorier')
+        for x in c:
+            list.append(x)
+        return list
