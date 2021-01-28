@@ -9,9 +9,9 @@ class Data:
         print('Database åbnet i class')
 
     def create_data(self):
-        # c = con.cursor()
-        # c.execute('DROP TABLE bruger_tabel')
-        # con.commit()
+        # c = self.con.cursor()
+        # c.execute('DROP TABLE kategorier')
+        # self.con.commit()
         # print('table drop')
         try:
             self.con.execute("""CREATE TABLE bruger_tabel (
@@ -37,7 +37,7 @@ class Data:
         try:
             self.con.execute("""CREATE TABLE kategorier (
         		id INTEGER PRIMARY KEY AUTOINCREMENT,
-        		kategori STRING)""")
+        		kategori TEXT)""")
             print('Tabel oprettet')
         except Exception as e:
             print('Tabellen findes allerede')
@@ -83,3 +83,8 @@ class Data:
         for x in c:
             list.append(x)
         return list
+
+    def slet_kategori(self, k_navn):
+        c = self.con.cursor()
+        c.execute('DELETE FROM kategorier WHERE kategori = ?', [k_navn])
+        self.con.commit()

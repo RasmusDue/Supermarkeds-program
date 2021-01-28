@@ -157,33 +157,59 @@ class Application(ttk.Frame):
 
     def katagorier(self):
         def add_kategori():
-            self.data.add_katagori(self.en_kategori.get())
-            close()
-
-        dlg = tk.Toplevel()
-        dlg.geometry("250x250")
-        dlg.title("Katagorier")
-        self.logo(dlg, 1, 0)
-        self.lbl_dine_kategorier = ttk.Label(dlg, text='Dine kategorier:')
-        self.lbl_dine_kategorier.grid(column =0, row = 1)
-
-        for x in self.data.get_kategorier():
-            Petra = ttk.Label(dlg, text=x[1])
-            Petra.grid()
-
-        self.lbl_kategori = ttk.Label(dlg, text='kategori')
-        self.lbl_kategori.grid(column =0, row = 99)
-        self.en_kategori = ttk.Entry(dlg)
-        self.en_kategori.grid(column=1, row=99)
+            if len(self.en_kategori.get())>=1:
+                print("Klik")
+                self.data.add_katagori(self.en_kategori.get())
+                close()
 
         def close():
             dlg.destroy()
             dlg.update()
 
+        def slet_kategori():
+
+
+            curItem = self.Kategorier_liste.item(self.Kategorier_liste.focus())['values']
+            if len(curItem) > 0:
+                print(curItem)
+                self.data.slet_kategori(curItem[0])
+                close()
+
+        dlg = tk.Toplevel()
+        #dlg.geometry("250x250")
+        dlg.title("Katagorier")
+        self.logo(dlg, 0, 0)
+        # self.lbl_dine_kategorier = ttk.Label(dlg, text='Dine kategorier:')
+        # self.lbl_dine_kategorier.grid(column =0, row = 1)
+
+        self.Kategorier_liste = ttk.Treeview(dlg, column=("column1"), show='headings')
+        self.Kategorier_liste.bind("<ButtonRelease-1>")
+        self.Kategorier_liste.heading("#1", text="Kategorier")
+        self.Kategorier_liste.column("#1",minwidth=0,width=100, stretch=tk.NO)
+
+        self.Kategorier_liste["displaycolumns"]=("column1")
+        ysb = ttk.Scrollbar(dlg, command=self.Kategorier_liste.yview, orient=tk.VERTICAL)
+        self.Kategorier_liste.configure(yscrollcommand=ysb.set)
+        self.Kategorier_liste.grid(column = 1, row = 0)
+
+        for x in self.data.get_kategorier():
+            self.Kategorier_liste.insert("", tk.END, values=(x[1]))
+
+        self.lbl_kategori = ttk.Label(dlg, text='Indtast Kategori')
+        self.lbl_kategori.grid(column =0, row = 1)
+        self.en_kategori = ttk.Entry(dlg)
+        self.en_kategori.grid(column=1, row=1)
+
         self.but_annuller = ttk.Button(dlg, text="Annuller", command=close)
-        self.but_annuller.grid(column=0,row=100)
+        self.but_annuller.grid(column=0,row=2)
         self.but_ok = ttk.Button(dlg, text="Tilføj kategori", command= add_kategori)
-        self.but_ok.grid(column=1,row=100)
+        self.but_ok.grid(column=1,row=2)
+
+
+
+        self.but_slet = ttk.Button(dlg, text="Slet kategori", command= slet_kategori)
+        self.but_slet.grid(column=1,row=3)
+
 
 
     def udsalg(self):
@@ -199,19 +225,46 @@ class Application(ttk.Frame):
         curItem = self.Vare_liste.item(self.Vare_liste.focus())['values']
 
         if len(curItem) > 0:
-            dlg = tk.Toplevel()
-            dlg.geometry("250x250")
-            dlg.title("Udsalgs_vare")
-            self.logo(dlg, 1, 0)
 
-            self.lbl_udsalgs_pris = ttk.Label(dlg, text='Udsalgs pris')
-            self.lbl_udsalgs_pris.grid(column =0, row = 1)
-            self.en_udsalgs_pris = ttk.Entry(dlg)
-            self.en_udsalgs_pris.grid(column=1, row=1)
-            self.but_annuller = ttk.Button(dlg, text="Annuller", command=close)
-            self.but_annuller.grid(column=1,row=6)
-            self.but_ok = ttk.Button(dlg, text="Opret udsalg", command= add_udsalg)
-            self.but_ok.grid(column=0,row=6)
+            dlg = tk.Toplevel()
+            dlg.geometry("500x300")
+            dlg.title("Udsalgs_vare")
+            # Create left and right frames
+            left_frame = tk.Frame(dlg, width=100, height= 400, bg='grey')
+            left_frame.grid(row=0, column=0, padx=10, pady=5)
+            right_frame = tk.Frame(dlg, width=150, height=400, bg='grey')
+            right_frame.grid(row=0, column=1, padx=10, pady=5)
+            self.logo(left_frame, 0, 0)
+
+            self.lbl_udsalgs_pris = ttk.Label(left_frame, text='Udsalgs pris')
+            self.lbl_udsalgs_pris.grid(column =0, row = 1,sticky='nesw')
+            self.en_udsalgs_pris = ttk.Entry(left_frame)
+            self.en_udsalgs_pris.grid(column=0, row=2,sticky='nesw')
+            self.but_annuller = ttk.Button(right_frame, text="Annuller", command=close)
+            self.but_annuller.grid(column=1,row=2,sticky='nesw')
+            self.but_ok = ttk.Button(left_frame, text="Opret udsalg", command= add_udsalg)
+            self.but_ok.grid(column=0,row=6,sticky='nesw')
+
+            # tabel
+            self.udsalg_liste = ttk.Treeview(right_frame, column=("column1", "column2", "column3", "column4", "column5", "column6"), show='headings')
+            self.udsalg_liste.bind("<ButtonRelease-1>")
+            self.udsalg_liste.heading("#1", text="Navn")
+            self.udsalg_liste.column("#1",minwidth=0,width=100, stretch=tk.NO)
+            self.udsalg_liste.heading("#2", text="Normal pris")
+            self.udsalg_liste.column("#2",minwidth=0,width=100, stretch=tk.NO)
+            self.udsalg_liste.heading("#3", text="Udsalgs_pris")
+            self.udsalg_liste.column("#3",minwidth=0,width=100, stretch=tk.NO)
+            self.udsalg_liste.heading("#4", text="Type")
+            self.udsalg_liste.column("#4",minwidth=0,width=100, stretch=tk.NO)
+            self.udsalg_liste.heading("#5", text="Lagerstatus")
+            self.udsalg_liste.column("#5",minwidth=0,width=100, stretch=tk.NO)
+            self.udsalg_liste.heading("#6", text="id")
+            self.udsalg_liste.column("#6",minwidth=0,width=100, stretch=tk.NO)
+
+            self.udsalg_liste["displaycolumns"]=("column1","column3")
+            ysb = ttk.Scrollbar(right_frame, command=self.udsalg_liste.yview, orient=tk.VERTICAL)
+            self.udsalg_liste.configure(yscrollcommand=ysb.set)
+            self.udsalg_liste.grid(column = 1, row = 0)
 
 
 root = tk.Tk()
