@@ -57,6 +57,11 @@ class Data:
         c.execute('INSERT INTO vare_tabel (navn, kobs_pris, salgs_pris, type, lagerstatus) VALUES (?,?,?,?,?)', (navn, kobs_pris, salgs_pris, type, lagerstatus))
         self.con.commit()
 
+    def slet_vare(self, navn):
+        c = self.con.cursor()
+        c.execute('DELETE FROM vare_tabel WHERE navn = ?', [navn])
+        self.con.commit()
+
     def show_all_vare(self):
         list = []
         c = self.con.cursor()
